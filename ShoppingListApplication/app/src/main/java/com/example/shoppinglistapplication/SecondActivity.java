@@ -10,28 +10,137 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class SecondActivity extends AppCompatActivity {
 
-   static ListView listView;
-   static ArrayList<String> items;
-    static ListViewAdapter adapter; //Holds items to be displayed in ListView
 
-    EditText input;
-    ImageView enter;
+    ArrayList<Items> items = new ArrayList<>();
+    ListView listView;
+    private int itemPrice;
+    private String itemName;
+
+
+    public void addItemsAL() {
+
+       EditText inputName = findViewById(R.id.inputName);
+        EditText inputPrice = findViewById(R.id.inputPrice);
+
+
+        itemName = inputName.getText().toString();
+        itemPrice = Integer.parseInt(inputPrice.getText().toString());
+        //Toast displays if they have not entered an item name
+
+        if (itemName == null || itemName.length() == 0) {
+            makeToast("Enter an item name");
+        } else if (itemPrice == 0 ) {
+            makeToast("Enter an item price");
+
+        } else
+
+
+            //If they have entered an item name then call the addItem method
+            items.add( new Items(itemName, itemPrice));
+        inputName.setText("");//The text is set as empty once the user presses enter
+        inputPrice.setText("");
+        makeToast("Added: " + itemName);
+        showListView();
+
+//Test Data
+    /*   Items i1 = new Items();
+        String name = "Bread";
+        int price = 4;
+        int quantity = 3;
+
+
+            i1 = new Items( " " + name + " ", price);
+            items.add(i1);
+
+
+     */
+        }
+
+
+
+
+
+
+
+
+    public void checkOut() {
+        int current_total = 0;
+
+
+        for(int i = 0; i < items.size(); i++)
+        {
+            Items item = items.get(i);
+            current_total += item.price;
+
+
+
+
+           // or current_total += items.get(i).price;
+        }
+
+         String total = Integer.toString(current_total);
+
+        Intent intent = new Intent(SecondActivity.this, Checkout_Activity.class);
+        //intent.putExtra("Items",items);
+        intent.putExtra("Total", total);
+        startActivity(intent);
+
+
+
+    }
+
+    public void removeItem(){
+
+        EditText removeItem = findViewById(R.id.removeProduct);
+        itemName = removeItem.getText().toString();
+
+        for(Iterator<Items> iterator = items.iterator(); iterator.hasNext(); ) {
+            if(iterator.next().name.equalsIgnoreCase(itemName))
+                iterator.remove();
+            removeItem.setText("");
+            makeToast("Removed: " + itemName);
+            showListView();
+        }
+
+
+
+            }
+
+
+    public void showListView() {
+
+        CustomAdapter myCustomAdapter = new CustomAdapter(SecondActivity.this, items);
+        listView.setAdapter(myCustomAdapter);
+
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_second);
+        //setContentView(R.layout.activity_second);
+        setContentView(R.layout.menu_activity);
+
+
+        Button addItemButton;
+        Button showItemsButton;
+        Button removeItemsButton;
+        Button checkOutButton;
 
 
         //Intent to get data
@@ -42,94 +151,54 @@ public class SecondActivity extends AppCompatActivity {
         TextView mResultTv = findViewById(R.id.resultTv);
 
         //Set Text
-        mResultTv.setText("Welcome : "+name);
+        mResultTv.setText("Welcome : " + name);
 
-        listView = findViewById(R.id.listview);
-        input = findViewById(R.id.input);
-        enter = findViewById(R.id.enter);
+        addItemButton = (Button) findViewById(R.id.addItems);
+        showItemsButton = (Button) findViewById(R.id.showItems);
+        removeItemsButton = (Button) findViewById(R.id.removeItems);
+        checkOutButton = (Button) findViewById(R.id.checkOut);
 
-
-
-        items = new ArrayList<>();
-        items.add("Apple");
-        items.add("Chicken roll");
-        items.add("Pizza");
+        listView = (ListView) findViewById(R.id.listView);
 
 
-        //Setting our Layout for our adapter and declaring what we want displayed
-        adapter = new ListViewAdapter(getApplicationContext(), items);
-        listView.setAdapter(adapter); //Setting the adapter for our ListView so that it can be displayed
-
-//Method for when the user clicks the tick icon
-enter.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        //Get text from the add item text box
-        String text = input.getText().toString();
-
-        //Toast displays if they have not entered an item name
-        if(text == null || text.length() == 0){
-            makeToast("Enter an item");
-        }else{
-            //If they have entered an item name then call the addItem method
-            addItem(text); //This method takes in text and adds it to our listview
-            input.setText("");//The text is set as empty once the user presses enter
-            makeToast("Added: " +text);
-        }
-
-    }
-});
-
-
-
-
-//ADD ITEM
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        addItemButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String name = items.get(position); //Position of item in ArrayList
-                makeToast(name); //Name of item in Arraylist pop up
+            public void onClick(View v) {
+                addItemsAL();
             }
         });
 
-        //REMOVE ITEM
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        checkOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                makeToast("Removed: " + items.get(position));
-                removeItem(position);
+            public void onClick(View v) {
+                checkOut();
+            }
+        });
 
-                return false;
+        showItemsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showListView();
+            }
+        });
+        removeItemsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                removeItem();
             }
         });
 
 
 
-
     }
-
-    //METHODS
-
-    public static void addItem(String item){
-        items.add(item);
-        listView.setAdapter(adapter);
-        //alternatively adapter.notifyDataSetChanged();
-        //or you could use listView.setAdapter(adapter)
-    }
-
-    public static void removeItem(int remove){
-        items.remove(remove);
-        adapter.notifyDataSetChanged();
-
-
-    }
-
 
     Toast toast;
 
     private void makeToast(String s) {
-        if(toast !=null) toast.cancel();
-        toast = Toast.makeText(getApplicationContext(), s , Toast.LENGTH_SHORT);
+        if (toast != null) toast.cancel();
+        toast = Toast.makeText(getApplicationContext(), s, Toast.LENGTH_SHORT);
         toast.show();
+
     }
+
 }

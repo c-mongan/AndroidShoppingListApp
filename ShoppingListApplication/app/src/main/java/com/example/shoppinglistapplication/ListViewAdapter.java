@@ -1,5 +1,7 @@
 package com.example.shoppinglistapplication;
 
+
+/*
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -70,3 +72,5 @@ public class ListViewAdapter extends ArrayAdapter<String> {
 
         return convertView; //Made changes to it
 }}
+
+*/

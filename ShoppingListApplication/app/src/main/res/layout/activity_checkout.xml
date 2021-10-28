@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Checkout_Activity">
+
+    <TextView
+        android:id="@+id/total"
+        android:layout_width="173dp"
+        android:layout_height="114dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/pay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/CVC" />
+
+
+    <EditText
+        android:id="@+id/payDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Please enter your payment details below"
+        app:layout_constraintBottom_toTopOf="@+id/cardNo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/cardNo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="Please enter your card number."
+        app:layout_constraintBottom_toTopOf="@+id/expDate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/payDetail" />
+
+    <EditText
+        android:id="@+id/expDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:hint="Please enter your cards expiry date."
+        app:layout_constraintBottom_toTopOf="@+id/CVC"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardNo" />
+
+    <EditText
+        android:id="@+id/CVC"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:hint="Please enter CVC (Located on the back)"
+        app:layout_constraintBottom_toTopOf="@+id/total"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/expDate" />
+
+    <EditText
+        android:id="@+id/pay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@null"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text=""
+        tools:layout_editor_absoluteX="100dp"
+        tools:layout_editor_absoluteY="607dp" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
